@@ -1,5 +1,5 @@
 <template>
-    <div class="item">
+    <div class="item" v-if="item">
         <h1>{{item.fullname}}</h1>
         <div class="item__row border p-2">
             <div class="item__prop">Адрес</div>
@@ -18,11 +18,26 @@
 </template>
 
 <script>
+    import axios from 'axios';
+
     export default {
         name: "Item",
-        props: {
-            item: {
-                type: Object
+        data() {
+            return {
+                item: null,
+            }
+        },
+        created() {
+            this.getItem();
+        },
+        methods: {
+            getItem() {
+                axios.get('/data.json')
+                    .then(res => {
+                        this.item = res.data.filter(item=>{
+                            return  item.order===Number(this.$route.params.id)
+                        })[0];
+                    })
             }
         }
     }
