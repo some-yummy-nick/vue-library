@@ -15,7 +15,8 @@
                 <router-link :to="{name: 'item', params: {id: item.order}}"> {{item.fullname}} {{item.libraries}}
                 </router-link>
             </div>
-            <nav aria-label="Page navigation" v-if="searchItems.length>=size">
+            <nav aria-label="Page navigation"
+                 v-if="searchItems.length>=size || pageNumber===pageCount -1 && pageNumber!==0">
                 <ul class="pagination justify-content-center">
                     <li class="page-item">
                         <button class='page-link' :disabled="pageNumber===0" @click="prevPage">Previous</button>
