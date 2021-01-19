@@ -9,9 +9,9 @@
             <router-link :to="{name: 'item', params: {id: item.order}}"> {{item.fullname}} {{item.libraries}}
             </router-link>
         </div>
-        <nav aria-label="Page navigation">
+        <nav aria-label="Page navigation" v-if="searchItems.length>=size">
             <ul class="pagination justify-content-center">
-                <li class="page-item" >
+                <li class="page-item">
                     <button class='page-link' :disabled="pageNumber===0" @click="prevPage">Previous</button>
                 </li>
                 <li class="page-item">
@@ -82,6 +82,7 @@
                     })
             },
             search(value) {
+                this.pageNumber=0;
                 this.q = value;
             },
             sortItems() {
