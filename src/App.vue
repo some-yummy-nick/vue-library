@@ -27,5 +27,12 @@
       color: #42b983;
     }
   }
+
+
+}
+
+.error{
+  color:red;
+  font-size: 20px;
 }
 </style>

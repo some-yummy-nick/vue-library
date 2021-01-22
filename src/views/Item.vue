@@ -1,19 +1,22 @@
 <template>
     <div>
-        <Preloader v-if="loading"/>
-        <div class="item" v-if="item">
-            <h1>{{item.fullname}}</h1>
-            <div class="item__row border p-2">
-                <div class="item__prop">Адрес</div>
-                <div class="item__value">{{item.address}}</div>
-            </div>
-            <div class="item__row border p-2">
-                <div class="item__prop">Территория</div>
-                <div class="item__value">{{item.territory}}</div>
-            </div>
-            <div class="item__row border p-2">
-                <div class="item__prop">Количество библиотек</div>
-                <div class="item__value">{{item.libraries}}</div>
+        <div class="error" v-if="error">{{error}}</div>
+        <div v-else>
+            <Preloader v-if="loading"/>
+            <div class="item" v-if="item">
+                <h1>{{item.fullname}}</h1>
+                <div class="item__row border p-2">
+                    <div class="item__prop">Адрес</div>
+                    <div class="item__value">{{item.address}}</div>
+                </div>
+                <div class="item__row border p-2">
+                    <div class="item__prop">Территория</div>
+                    <div class="item__value">{{item.territory}}</div>
+                </div>
+                <div class="item__row border p-2">
+                    <div class="item__prop">Количество библиотек</div>
+                    <div class="item__value">{{item.libraries}}</div>
+                </div>
             </div>
         </div>
     </div>
@@ -30,6 +33,7 @@
             return {
                 item: null,
                 loading: true,
+                error: null
             }
         },
         created() {
@@ -44,6 +48,7 @@
                         })[0];
                         this.loading = false;
                     })
+                    .catch(e => this.error = e)
             }
         }
     }
