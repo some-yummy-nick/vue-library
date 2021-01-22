@@ -1,31 +1,35 @@
 <template>
     <div class="app">
-        <Preloader v-if="loading"/>
-        <div v-if="items.length">
-            <Search @search="search"/>
-            <div class="sort pt-2 mb-2">
-                <button class="btn btn-dark" type="button" @click="sort('libraries')">Сортировать по количеству
-                    библиотек
-                    <span class="arrow"
-                          v-if="currentSort==='stargazers_count'"
-                          :class="activeSortClass">↓</span>
-                </button>
+        <div class="error" v-if="error">{{error}}</div>
+        <div v-else>
+            <Preloader v-if="loading"/>
+            <div v-if="items.length">
+                <Search @search="search"/>
+                <div class="sort pt-2 mb-2">
+                    <button class="btn btn-dark" type="button" @click="sort('libraries')">Сортировать по количеству
+                        библиотек
+                        <span class="arrow"
+                              v-if="currentSort==='stargazers_count'"
+                              :class="activeSortClass">↓</span>
+                    </button>
+                </div>
+                <div class="app__item border mb-2" v-for="item in searchItems" :key="item.order">
+                    <router-link :to="{name: 'item', params: {id: item.order}}"> {{item.fullname}} {{item.libraries}}
+                    </router-link>
+                </div>
+                <nav aria-label="Page navigation"
+                     v-if="searchItems.length>=size || pageNumber===pageCount -1 && pageNumber!==0">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item">
+                            <button class='page-link' :disabled="pageNumber===0" @click="prevPage">Previous</button>
+                        </li>
+                        <li class="page-item">
+                            <button @click="nextPage" :disabled="pageNumber >= pageCount -1" class='page-link'>Next
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
             </div>
-            <div class="app__item border mb-2" v-for="item in searchItems" :key="item.order">
-                <router-link :to="{name: 'item', params: {id: item.order}}"> {{item.fullname}} {{item.libraries}}
-                </router-link>
-            </div>
-            <nav aria-label="Page navigation"
-                 v-if="searchItems.length>=size || pageNumber===pageCount -1 && pageNumber!==0">
-                <ul class="pagination justify-content-center">
-                    <li class="page-item">
-                        <button class='page-link' :disabled="pageNumber===0" @click="prevPage">Previous</button>
-                    </li>
-                    <li class="page-item">
-                        <button @click="nextPage" :disabled="pageNumber >= pageCount -1" class='page-link'>Next</button>
-                    </li>
-                </ul>
-            </nav>
         </div>
     </div>
 </template>
@@ -46,7 +50,8 @@
                 currentSort: 'libraries',
                 currentSortDir: 'desc',
                 size: 10,
-                pageNumber: 0
+                pageNumber: 0,
+                error: null
             }
         },
         created() {
@@ -88,6 +93,7 @@
                         this.items = res.data;
                         this.loading = false;
                     })
+                    .catch(e => this.error = e)
             },
             search(value) {
                 this.pageNumber = 0;
