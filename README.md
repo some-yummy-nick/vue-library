@@ -1,3 +1,5 @@
+![screenshot](https://github.com/some-yummy-nick/vue-library/blob/master/vue-library.png)
+
 # vue-library
 https://some-yummy-vue-library.netlify.app
 
